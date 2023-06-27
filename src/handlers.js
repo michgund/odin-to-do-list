@@ -16,7 +16,8 @@ const handlers = (() => {
     const form = document.querySelector("#favDialog>form");
     form.addEventListener("submit", () => {
       projects.addProject(projects.createNewProject(project.value));
-      dom.populateTabBar(project.value);
+      dom.populateTabBar();
+      form.reset();
     });
   }
 

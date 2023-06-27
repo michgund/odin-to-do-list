@@ -4,15 +4,6 @@ import handlers from "./handlers";
 const projects = (() => {
   let myProjects = [];
 
-  function createNewTodo(name, description, priority, dueDate) {
-    return {
-      name: name,
-      description: description,
-      priority: priority,
-      dueDate: dueDate,
-    };
-  }
-
   function createNewProject(name) {
     return {
       name: name,
@@ -23,11 +14,27 @@ const projects = (() => {
     myProjects.push(project);
   }
 
+  function createSome() {
+    addProject(createNewProject("todo list"));
+    addProject(createNewProject("learn React"));
+    addProject(createNewProject("todo list"));
+    addProject(createNewProject("learn React"));
+  }
+
+  function fetchTodos(project) {
+    return todos.getProjectTodos(project);
+  }
+
+  function displayTodos(project) {
+    fetchTodos(project);
+    dom.renderTodos(project);
+  }
+
   return {
-    createNewTodo,
     createNewProject,
     addProject,
     myProjects,
+    createSome,
   };
 })();
 

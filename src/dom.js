@@ -17,12 +17,16 @@ const dom = (() => {
     return element;
   }
 
-  function populateTabBar(name) {
-    const element = document.createElement("div");
-    element.classList.add("tab");
-    element.classList.add("project-tab");
-    element.textContent = name;
-    document.querySelector(".tabs").appendChild(element);
+  function populateTabBar() {
+    document.querySelector(".tabs").innerHTML = "";
+    document.querySelector(".tabs").appendChild(newProjectTab());
+    projects.myProjects.forEach((project) => {
+      const element = document.createElement("div");
+      element.classList.add("tab");
+      element.classList.add("project-tab");
+      element.textContent = project.name;
+      document.querySelector(".tabs").appendChild(element);
+    });
   }
 
   function createModal() {
@@ -40,6 +44,7 @@ const dom = (() => {
     const plus = document.createElement("button");
     plus.classList.add("new-project");
     plus.innerHTML = "+";
+    plus.addEventListener("click", handlers.handleNewProjectClick);
     element.appendChild(plus);
     return element;
   }
@@ -49,10 +54,19 @@ const dom = (() => {
     document.body.appendChild(createTabBar());
     document.body.appendChild(createModal());
     document.querySelector(".tabs").appendChild(newProjectTab());
-    document
-      .querySelector(".new-project")
-      .addEventListener("click", handlers.handleNewProjectClick);
     handlers.handleNewProjectSubmit();
+    projects.createSome();
+    populateTabBar();
+    document.body.appendChild(createTodoDiv());
+  }
+
+  function createTodoDiv() {
+    const element = document.createElement("div");
+    element.classList.add("todo-div");
+    const h1 = document.createElement("h1");
+    h1.textContent = "All todo's";
+    element.appendChild(h1);
+    return element;
   }
 
   return {
