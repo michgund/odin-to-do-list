@@ -60,3 +60,60 @@ body {
 .new-project:hover {
   cursor: pointer;
 }
+
+#favDialog {
+  max-width: 320px;
+  /* height: 50vh; */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: whitesmoke;
+  border-radius: 5px;
+  border: none;
+}
+
+#favDialog form {
+  padding: 2vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center; */
+  gap: 1em;
+}
+
+#favDialog p {
+  display: flex;
+  justify-content: space-between;
+}
+
+#favDialog form div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+}
+
+#favDialog form div button {
+  padding: 0.2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1em;
+  /* width: 2vh;
+  height: 2vh; */
+  /* background-color: lightcyan; */
+  /* color: gray; */
+  /* border: none; */
+  border-radius: 5px;
+  transition: 0.5s;
+}
+
+#favDialog form div button:hover {
+  cursor: pointer;
+  box-shadow: 2px 2px 10px cyan;
+  transform: scale(1.1);
+}
+
+textarea {
+  resize: none;
+}
