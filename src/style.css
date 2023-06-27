@@ -26,7 +26,9 @@ body {
 }
 
 .tabs {
-  width: 100%;
+  display: flex;
+  gap: 0.5em;
+  /* width: 10vw; */
   /* height: 2vh; */
   background-color: lightcyan;
   padding: 1vh;
@@ -42,6 +44,10 @@ body {
   background-color: gray;
   color: cyan;
   border-radius: 5px 5px 0 0;
+}
+
+.tab:hover:not(.tab:first-of-type) {
+  cursor: pointer;
 }
 
 .new-project {
