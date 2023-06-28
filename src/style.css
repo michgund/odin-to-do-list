@@ -102,13 +102,13 @@ dialog form div button {
   /* color: gray; */
   /* border: none; */
   border-radius: 5px;
-  transition: 0.5s;
+  /* transition: 0.5s; */
 }
 
 dialog form div button:hover {
   cursor: pointer;
   box-shadow: 2px 2px 10px cyan;
-  transform: scale(1.1);
+  /* transform: scale(1.1); */
 }
 
 textarea {
@@ -125,12 +125,33 @@ textarea {
 
 .todo-div > h1 {
   /* text-decoration: underline; */
-  line-height: 0.55em;
+  /* line-height: 0.55em; */
   margin: 1vh;
   padding-top: 2vh;
   vertical-align: bottom;
-  padding-bottom: 0;
+  padding-bottom: 1vh;
   margin-bottom: 0;
   border-bottom: 5px solid gray;
   color: gray;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.new-todo {
+  padding: 0 10px;
+  background-color: cyan;
+  color: gray;
+  font-size: 1.1em;
+  border: none;
+  border-radius: 5px;
+}
+
+.new-todo:hover {
+  cursor: pointer;
+}
+
+.clicked {
+  transform: scale(0.9);
 }

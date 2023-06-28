@@ -1,14 +1,27 @@
 import dom from "./dom";
 import projects from "./projects";
+import todos from "./todos";
 
 const handlers = (() => {
   function handleNewProjectClick() {
     const dialog = document.querySelector("#projectDialog");
-    // dialog.close();
     dialog.showModal();
 
-    document.querySelector("#cancel").addEventListener("click", () => {
+    document.querySelector("#projectCancel").addEventListener("click", () => {
       dialog.close();
+    });
+  }
+
+  function handleAnyClickStyle() {
+    const btns = document.querySelectorAll("button");
+    btns.forEach((btn) => {
+      btn.addEventListener("mousedown", () => {
+        btn.classList.add("clicked");
+        window.addEventListener("mouseup", () => {
+          btn.classList.remove("clicked");
+        });
+      });
+      //   btn.addEventListener("mousedown", () => {});
     });
   }
 
@@ -18,6 +31,25 @@ const handlers = (() => {
       projects.addProject(projects.createNewProject(project.value));
       dom.populateTabBar();
       form.reset();
+    });
+  }
+
+  function handleNewTodoSubmit() {
+    const form = document.querySelector("#todoDialog>form");
+    form.addEventListener("submit", () => {
+      console.log(todo.value);
+      console.log(description.value);
+      console.log(priority.value);
+      form.reset();
+    });
+  }
+
+  function handleNewTodoClick() {
+    const dialog = document.querySelector("#todoDialog");
+    dialog.showModal();
+
+    document.querySelector("#todoCancel").addEventListener("click", () => {
+      dialog.close();
     });
   }
 
@@ -46,6 +78,9 @@ const handlers = (() => {
     handleNewProjectClick,
     handleNewProjectSubmit,
     handleProjectClick,
+    handleNewTodoClick,
+    handleAnyClickStyle,
+    handleNewTodoSubmit,
   };
 })();
 
