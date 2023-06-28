@@ -48,28 +48,17 @@ body {
   border-radius: 5px 5px 0 0;
 }
 
-.tab:hover:not(.tab:first-of-type) {
+.tab:hover {
   cursor: pointer;
+  background-color: cornflowerblue;
 }
 
-.new-project {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1em;
-  width: 2vh;
-  height: 2vh;
-  background-color: cyan;
-  color: gray;
-  border: none;
-  border-radius: 5px;
+.selected {
+  background-color: cornflowerblue;
+  /* color: gray; */
 }
 
-.new-project:hover {
-  cursor: pointer;
-}
-
-#favDialog {
+dialog {
   max-width: 320px;
   /* height: 50vh; */
   top: 50%;
@@ -80,7 +69,7 @@ body {
   border: none;
 }
 
-#favDialog form {
+dialog form {
   padding: 2vh;
   display: flex;
   flex-direction: column;
@@ -89,19 +78,19 @@ body {
   gap: 1em;
 }
 
-#favDialog p {
+dialog p {
   display: flex;
   justify-content: space-between;
 }
 
-#favDialog form div {
+dialog form div {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1em;
 }
 
-#favDialog form div button {
+dialog form div button {
   padding: 0.2em;
   display: flex;
   justify-content: center;
@@ -116,7 +105,7 @@ body {
   transition: 0.5s;
 }
 
-#favDialog form div button:hover {
+dialog form div button:hover {
   cursor: pointer;
   box-shadow: 2px 2px 10px cyan;
   transform: scale(1.1);

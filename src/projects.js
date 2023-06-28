@@ -4,9 +4,10 @@ import handlers from "./handlers";
 const projects = (() => {
   let myProjects = [];
 
-  function createNewProject(name) {
+  function createNewProject(name, selected) {
     return {
       name: name,
+      selected: selected,
     };
   }
 
@@ -15,10 +16,10 @@ const projects = (() => {
   }
 
   function createSome() {
-    addProject(createNewProject("todo list"));
-    addProject(createNewProject("learn React"));
-    addProject(createNewProject("todo list"));
-    addProject(createNewProject("learn React"));
+    addProject(createNewProject("Todo list", false));
+    addProject(createNewProject("Learn React", false));
+    addProject(createNewProject("TOP", false));
+    addProject(createNewProject("Life", false));
   }
 
   function fetchTodos(project) {
