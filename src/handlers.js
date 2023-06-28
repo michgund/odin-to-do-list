@@ -27,19 +27,47 @@ const handlers = (() => {
 
   function handleNewProjectSubmit() {
     const form = document.querySelector("#projectDialog>form");
-    form.addEventListener("submit", () => {
-      projects.addProject(projects.createNewProject(project.value));
-      dom.populateTabBar();
-      form.reset();
+    form.addEventListener("submit", (e) => {
+      let exists = false;
+      projects.myProjects.forEach((element) => {
+        if (element.name == project.value) {
+          e.preventDefault();
+          const warning = document.createElement("p");
+          warning.setAttribute("id", "warning");
+          warning.style.color = "red";
+          warning.textContent =
+            "Project already exists! Please use a different name to identify a unique project.";
+          form.insertBefore(warning, form.firstElementChild.nextElementSibling);
+          exists = true;
+        }
+      });
+      if (!exists) {
+        projects.addProject(projects.createNewProject(project.value));
+        dom.populateTabBar();
+        form.reset();
+      }
     });
   }
 
   function handleNewTodoSubmit() {
     const form = document.querySelector("#todoDialog>form");
     form.addEventListener("submit", () => {
-      console.log(todo.value);
-      console.log(description.value);
-      console.log(priority.value);
+      projects.myProjects.forEach((element) => {
+        if (element.selected) {
+          todos.addTodo(
+            todos.createNewTodo(
+              element.name,
+              todo.value,
+              description.value,
+              priority.value,
+              dueDate.value,
+              true
+            )
+          );
+          dom.createTodoDiv(element.name);
+        }
+      });
+      console.log(todos.myTodos);
       form.reset();
     });
   }
@@ -68,7 +96,7 @@ const handlers = (() => {
             ? (project.selected = true)
             : (project.selected = false)
         );
-        console.log(projects.myProjects);
+        // console.log(projects.myProjects);
         element.classList.add("selected");
       });
     });

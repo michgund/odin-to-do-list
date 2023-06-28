@@ -1,5 +1,7 @@
 import projects from "./projects";
 import handlers from "./handlers";
+import todos from "./todos";
+import { format } from "date-fns";
 
 const dom = (() => {
   function createBanner() {
@@ -52,7 +54,7 @@ const dom = (() => {
     const dialog = document.createElement("dialog");
     dialog.setAttribute("id", "todoDialog");
     dialog.innerHTML =
-      '<form method="dialog"> <p> <label for="todo">Task:</label><input type="text" name="todo" id="todo"></p><p> <label for="description">Todo Description:</label><textarea name="description" id="description"></textarea></p><p> <label for="priority">Priority</label> <select id="priority" name="priority"> <option>Choose</option> <option>Low</option> <option>Medium</option> <option>High</option> </select> </p> <div> <button class="down" id="todoCancel" type="reset">Cancel</button> <button class="down" type="submit">Confirm</button> </div> </form>';
+      '<form method="dialog"> <p> <label for="todo">Task:</label><input type="text" name="todo" id="todo"></p><p> <label for="description">Todo Description:</label><textarea name="description" id="description"></textarea></p><p> <label for="priority">Priority</label> <select id="priority" name="priority"> <option>Choose</option> <option>Low</option> <option>Medium</option> <option>High</option> </select> </p><p> <label for="dueDate">Date due:</label><input type="date" id="dueDate" name="dueDate"></p> <div> <button class="down" id="todoCancel" type="reset">Cancel</button> <button class="down" type="submit">Confirm</button> </div> </form>';
     return dialog;
   }
 
@@ -74,6 +76,7 @@ const dom = (() => {
     handlers.handleNewProjectSubmit();
     handlers.handleNewTodoSubmit();
     projects.createSome();
+    todos.createSome();
     populateTabBar();
     document.body.appendChild(createTodoDiv("All"));
     document.querySelector(".home").classList.add("selected");
@@ -98,6 +101,60 @@ const dom = (() => {
     element.appendChild(h1);
     document.body.appendChild(element);
     handlers.handleAnyClickStyle();
+    element.appendChild(viewTodos(project));
+    return element;
+  }
+
+  function viewTodos(project) {
+    console.log(todos.myTodos);
+    const element = document.createElement("div");
+    todos.myTodos.sort((a, b) => {
+      return a.dueDate < b.dueDate ? -1 : b.dueDate > a.dueDate ? 1 : 0;
+    });
+
+    todos.myTodos.forEach((todo) => {
+      if (todo.project == project) {
+        const eachTodo = document.createElement("div");
+        const div = document.createElement("div");
+        eachTodo.classList.add("todo");
+        eachTodo.appendChild(div);
+
+        const task = document.createElement("p");
+        task.textContent = todo.name;
+        div.appendChild(task);
+
+        const prio = document.createElement("p");
+        prio.textContent = `${todo.priority} priority`;
+        div.appendChild(prio);
+
+        const buttons = document.createElement("div");
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "Edit";
+        buttons.appendChild(editBtn);
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        buttons.appendChild(deleteBtn);
+        div.appendChild(buttons);
+
+        eachTodo.appendChild(div);
+
+        const bottom = document.createElement("div");
+        const describe = document.createElement("p");
+        describe.textContent = todo.description;
+        bottom.appendChild(describe);
+        const date = document.createElement("p");
+        let dateArr = todo.dueDate.split("-");
+        console.log(dateArr);
+        date.textContent = format(
+          new Date(dateArr[0], dateArr[1], dateArr[2]),
+          "MMMM do"
+        );
+        bottom.appendChild(date);
+        eachTodo.appendChild(bottom);
+        element.appendChild(eachTodo);
+      }
+    });
     return element;
   }
 

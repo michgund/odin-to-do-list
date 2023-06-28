@@ -22,15 +22,6 @@ const projects = (() => {
     addProject(createNewProject("Life", false));
   }
 
-  function fetchTodos(project) {
-    return todos.getProjectTodos(project);
-  }
-
-  function displayTodos(project) {
-    fetchTodos(project);
-    dom.renderTodos(project);
-  }
-
   return {
     createNewProject,
     addProject,
