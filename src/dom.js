@@ -74,7 +74,7 @@ const dom = (() => {
     document.body.appendChild(createTodoModal());
     document.querySelector(".tabs").appendChild(newProjectTab());
     // handlers.handleNewProjectSubmit();
-    handlers.handleNewTodoSubmit();
+    // handlers.handleNewTodoSubmit();
     projects.createSome();
     todos.createSome();
     populateTabBar();
@@ -112,7 +112,7 @@ const dom = (() => {
       return a.dueDate < b.dueDate ? -1 : b.dueDate > a.dueDate ? 1 : 0;
     });
     todos.myTodos.sort((a, b) => {
-      return a.active - b.active;
+      return b.active - a.active;
     });
 
     todos.myTodos.forEach((todo) => {
@@ -157,7 +157,19 @@ const dom = (() => {
         bottom.appendChild(date);
         right.appendChild(bottom);
         const deactivate = document.createElement("button");
-        deactivate.textContent = "-";
+        // deactivate.classList.add("deactivate");
+        deactivate.addEventListener("click", () => {
+          handlers.handleTodoDeactivate(todo);
+          createTodoDiv(project);
+        });
+        if (!todo.active) {
+          //   right.style.opacity = "0.2";
+          //   right.style.textDecoration = "line-through";
+          right.className = "deactive";
+          deactivate.textContent = "+";
+        } else {
+          deactivate.textContent = "-";
+        }
         eachTodo.appendChild(deactivate);
         eachTodo.appendChild(right);
         element.appendChild(eachTodo);

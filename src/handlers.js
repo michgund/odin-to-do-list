@@ -176,8 +176,11 @@ const handlers = (() => {
   function handleNewTodoClick() {
     const dialog = document.querySelector("#todoDialog");
     dialog.showModal();
+    handleNewTodoSubmit();
 
     document.querySelector("#todoCancel").addEventListener("click", () => {
+      const warnings = dialog.querySelectorAll("span");
+      warnings.forEach((warning) => warning.remove());
       dialog.close();
     });
   }
@@ -203,6 +206,10 @@ const handlers = (() => {
     });
   }
 
+  function handleTodoDeactivate(todo) {
+    todo.active = todo.active ? false : true;
+  }
+
   return {
     handleNewProjectClick,
     handleNewProjectSubmit,
@@ -210,6 +217,7 @@ const handlers = (() => {
     handleNewTodoClick,
     handleAnyClickStyle,
     handleNewTodoSubmit,
+    handleTodoDeactivate,
   };
 })();
 

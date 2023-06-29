@@ -187,3 +187,11 @@ textarea {
   display: flex;
   justify-content: space-between;
 }
+
+.deactive {
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' preserveAspectRatio='none' viewBox='0 0 100 100'><path d='M100 0 L0 100 ' stroke='black' stroke-width='5'/><path d='M0 0 L100 100 ' stroke='black' stroke-width='5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%, auto;
+  opacity: 0.5;
+}
