@@ -41,7 +41,7 @@ const todos = (() => {
       createNewTodo(
         "Todo list",
         "Do some stuff",
-        "Add lorem ipsum but be done writing",
+        "Add lorem ipsum but be done writing but how about some filters too?",
         "Low",
         "2023-10-12",
         true

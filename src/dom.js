@@ -106,7 +106,7 @@ const dom = (() => {
   }
 
   function viewTodos(project) {
-    console.log(todos.myTodos);
+    // console.log(todos.myTodos);
     const element = document.createElement("div");
     todos.myTodos.sort((a, b) => {
       return a.dueDate < b.dueDate ? -1 : b.dueDate > a.dueDate ? 1 : 0;
@@ -149,7 +149,7 @@ const dom = (() => {
         bottom.appendChild(describe);
         const date = document.createElement("p");
         let dateArr = todo.dueDate.split("-");
-        console.log(dateArr);
+        // console.log(dateArr);
         date.textContent = format(
           new Date(dateArr[0], dateArr[1], dateArr[2]),
           "MMMM do"

@@ -1,6 +1,7 @@
 import dom from "./dom";
 import projects from "./projects";
 import todos from "./todos";
+import { isFuture, isValid } from "date-fns";
 
 const handlers = (() => {
   function handleNewProjectClick() {
@@ -34,14 +35,18 @@ const handlers = (() => {
     const form = document.querySelector("#projectDialog>form");
     form.addEventListener("submit", (e) => {
       // form was submitting to quickly or something like that, so had to check if string is empty to prevent double submission(?)
-      if (!validateProject(project.value) || project.value == "") {
+      // also add "home" because all todo's are "home".. Quick troubleshooting.. //TODO fix.
+      if (
+        !validateProject(project.value) ||
+        project.value == "" ||
+        project.value == "Home"
+      ) {
         e.preventDefault();
       } else {
         projects.addProject(projects.createNewProject(project.value));
         dom.populateTabBar();
         form.reset();
         document.querySelector("#projectDialog").close();
-        console.log("hit");
         if (document.querySelector("#warning")) {
           document.querySelector("#warning").remove();
         }
@@ -70,7 +75,8 @@ const handlers = (() => {
 
   function handleNewTodoSubmit() {
     const form = document.querySelector("#todoDialog>form");
-    form.addEventListener("submit", () => {
+    form.addEventListener("submit", (e) => {
+      //   e.preventDefault();
       projects.myProjects.forEach((element) => {
         if (element.selected) {
           if (validateTodo(form)) {
@@ -85,18 +91,85 @@ const handlers = (() => {
               )
             );
             dom.createTodoDiv(element.name);
+            form.reset();
+            document.querySelector("#todoDialog").close();
           }
+        } else {
+          e.preventDefault();
         }
       });
-      console.log(todos.myTodos);
-      form.reset();
     });
   }
 
-  function validateTodo(form) {
-    if (!todo.value) {
-      const nameWarning = document.createElement("p");
+  function validateTodo(x) {
+    const todoForm = document.querySelector("#todoDialog>form");
+    const dateArr = dueDate.value.split("-");
+
+    let nameValid = todo.value ? true : false,
+      descriptionValid = description.value ? true : false,
+      priorityValid = priority.value != "Choose" ? true : false,
+      dateValid = isFuture(new Date(dateArr[0], dateArr[1], dateArr[2]))
+        ? true
+        : false;
+
+    // Validate task name
+    if (!nameValid && !document.querySelector("#nameWarning")) {
+      const nameWarning = document.createElement("span");
+      nameWarning.setAttribute("id", "nameWarning");
+      nameWarning.style.color = "red";
       nameWarning.textContent = "Please give your task a name.";
+      todoForm.insertBefore(
+        nameWarning,
+        todoForm.querySelector("p:nth-of-type(2)")
+      );
+    } else if (nameValid && document.querySelector("#nameWarning")) {
+      document.querySelector("#nameWarning").remove();
+    }
+
+    //validate task description
+    if (!descriptionValid && !document.querySelector("#descriptionWarning")) {
+      const descriptionWarning = document.createElement("span");
+      descriptionWarning.setAttribute("id", "descriptionWarning");
+      descriptionWarning.style.color = "red";
+      descriptionWarning.textContent = "Please give your task a description.";
+      todoForm.insertBefore(
+        descriptionWarning,
+        todoForm.querySelector("p:nth-of-type(3)")
+      );
+    } else if (
+      descriptionValid &&
+      document.querySelector("#descriptionWarning")
+    ) {
+      document.querySelector("#descriptionWarning").remove();
+    }
+
+    //validate task priority
+    if (!priorityValid && !document.querySelector("#priorityWarning")) {
+      const priorityWarning = document.createElement("span");
+      priorityWarning.setAttribute("id", "priorityWarning");
+      priorityWarning.style.color = "red";
+      priorityWarning.textContent = "Please give your task a priority.";
+      todoForm.insertBefore(
+        priorityWarning,
+        todoForm.querySelector("p:nth-of-type(4)")
+      );
+    } else if (priorityValid && document.querySelector("#priorityWarning")) {
+      document.querySelector("#priorityWarning").remove();
+    }
+
+    //validate task date
+    if (!dateValid && !document.querySelector("#dateWarning")) {
+      const dateWarning = document.createElement("span");
+      dateWarning.setAttribute("id", "dateWarning");
+      dateWarning.style.color = "red";
+      dateWarning.textContent = "Please set a due date in the future.";
+      todoForm.insertBefore(dateWarning, todoForm.querySelector("div"));
+    } else if (dateValid && document.querySelector("#dateWarning")) {
+      document.querySelector("#dateWarning").remove();
+    }
+
+    if (nameValid && descriptionValid && priorityValid && dateValid) {
+      return true;
     }
   }
 
