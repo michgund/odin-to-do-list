@@ -224,3 +224,17 @@ textarea {
 .todo > div > div:nth-of-type(2) > div > button {
   align-self: flex-end;
 }
+
+.todo-btn-div div {
+  padding: 3px;
+}
+
+.active-btn {
+  background-color: cyan;
+  color: gray;
+  border-radius: 5px;
+}
+
+.active-btn:hover {
+  cursor: pointer;
+}

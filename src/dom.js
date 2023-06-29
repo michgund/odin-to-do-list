@@ -136,12 +136,15 @@ const dom = (() => {
 
         const buttons = document.createElement("div");
         buttons.classList.add("todo-btn-div");
-        const editBtn = document.createElement("button");
+        const editBtn = document.createElement("div");
+        editBtn.className = "active-btn";
+
         editBtn.textContent = "Edit";
         buttons.appendChild(editBtn);
 
-        const deleteBtn = document.createElement("button");
+        const deleteBtn = document.createElement("div");
         deleteBtn.textContent = "X";
+        deleteBtn.className = "active-btn";
         buttons.appendChild(deleteBtn);
         infoDivRight.appendChild(buttons);
 
@@ -171,8 +174,8 @@ const dom = (() => {
           //   infoDiv.style.textDecoration = "line-through";
           infoDiv.className = "deactive";
           deactivate.textContent = "+";
-          editBtn.remove();
-          deleteBtn.remove();
+          editBtn.className = "";
+          deleteBtn.className = "";
         } else {
           deactivate.textContent = "-";
         }
