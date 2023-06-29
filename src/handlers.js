@@ -6,8 +6,13 @@ const handlers = (() => {
   function handleNewProjectClick() {
     const dialog = document.querySelector("#projectDialog");
     dialog.showModal();
+    handleNewProjectSubmit();
 
     document.querySelector("#projectCancel").addEventListener("click", () => {
+      //   dialog.nextElementSibling.reset();
+      if (document.querySelector("#warning")) {
+        document.querySelector("#warning").remove();
+      }
       dialog.close();
     });
   }
@@ -28,25 +33,39 @@ const handlers = (() => {
   function handleNewProjectSubmit() {
     const form = document.querySelector("#projectDialog>form");
     form.addEventListener("submit", (e) => {
-      let exists = false;
-      projects.myProjects.forEach((element) => {
-        if (element.name == project.value) {
-          e.preventDefault();
+      // form was submitting to quickly or something like that, so had to check if string is empty to prevent double submission(?)
+      if (!validateProject(project.value) || project.value == "") {
+        e.preventDefault();
+      } else {
+        projects.addProject(projects.createNewProject(project.value));
+        dom.populateTabBar();
+        form.reset();
+        document.querySelector("#projectDialog").close();
+        console.log("hit");
+        if (document.querySelector("#warning")) {
+          document.querySelector("#warning").remove();
+        }
+      }
+    });
+  }
+
+  function validateProject(newProject) {
+    const form = document.querySelector("#projectDialog>form");
+    let uniqueProject = true;
+    projects.myProjects.forEach((element) => {
+      if (element.name == newProject) {
+        uniqueProject = false;
+        if (!document.querySelector("#warning")) {
           const warning = document.createElement("p");
           warning.setAttribute("id", "warning");
           warning.style.color = "red";
           warning.textContent =
             "Project already exists! Please use a different name to identify a unique project.";
           form.insertBefore(warning, form.firstElementChild.nextElementSibling);
-          exists = true;
         }
-      });
-      if (!exists) {
-        projects.addProject(projects.createNewProject(project.value));
-        dom.populateTabBar();
-        form.reset();
       }
     });
+    return uniqueProject;
   }
 
   function handleNewTodoSubmit() {
@@ -54,22 +73,31 @@ const handlers = (() => {
     form.addEventListener("submit", () => {
       projects.myProjects.forEach((element) => {
         if (element.selected) {
-          todos.addTodo(
-            todos.createNewTodo(
-              element.name,
-              todo.value,
-              description.value,
-              priority.value,
-              dueDate.value,
-              true
-            )
-          );
-          dom.createTodoDiv(element.name);
+          if (validateTodo(form)) {
+            todos.addTodo(
+              todos.createNewTodo(
+                element.name,
+                todo.value,
+                description.value,
+                priority.value,
+                dueDate.value,
+                true
+              )
+            );
+            dom.createTodoDiv(element.name);
+          }
         }
       });
       console.log(todos.myTodos);
       form.reset();
     });
+  }
+
+  function validateTodo(form) {
+    if (!todo.value) {
+      const nameWarning = document.createElement("p");
+      nameWarning.textContent = "Please give your task a name.";
+    }
   }
 
   function handleNewTodoClick() {

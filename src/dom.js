@@ -54,7 +54,7 @@ const dom = (() => {
     const dialog = document.createElement("dialog");
     dialog.setAttribute("id", "todoDialog");
     dialog.innerHTML =
-      '<form method="dialog"> <p> <label for="todo">Task:</label><input type="text" name="todo" id="todo"></p><p> <label for="description">Todo Description:</label><textarea name="description" id="description"></textarea></p><p> <label for="priority">Priority</label> <select id="priority" name="priority"> <option>Choose</option> <option>Low</option> <option>Medium</option> <option>High</option> </select> </p><p> <label for="dueDate">Date due:</label><input type="date" id="dueDate" name="dueDate"></p> <div> <button class="down" id="todoCancel" type="reset">Cancel</button> <button class="down" type="submit">Confirm</button> </div> </form>';
+      '<form method="dialog"> <p> <label for="todo">Task:</label><input type="text" name="todo" id="todo"></p><p> <label for="description">Todo Description:</label><textarea name="description" id="description"></textarea></p><p> <label for="priority">Priority</label> <select id="priority" name="priority"> <option selected disabled>Choose</option> <option>Low</option> <option>Medium</option> <option>High</option> </select> </p><p> <label for="dueDate">Date due:</label><input type="date" id="dueDate" name="dueDate"></p> <div> <button class="down" id="todoCancel" type="reset">Cancel</button> <button class="down" type="submit">Confirm</button> </div> </form>';
     return dialog;
   }
 
@@ -73,7 +73,7 @@ const dom = (() => {
     document.body.appendChild(createProjectModal());
     document.body.appendChild(createTodoModal());
     document.querySelector(".tabs").appendChild(newProjectTab());
-    handlers.handleNewProjectSubmit();
+    // handlers.handleNewProjectSubmit();
     handlers.handleNewTodoSubmit();
     projects.createSome();
     todos.createSome();
@@ -100,8 +100,8 @@ const dom = (() => {
     }
     element.appendChild(h1);
     document.body.appendChild(element);
-    handlers.handleAnyClickStyle();
     element.appendChild(viewTodos(project));
+    handlers.handleAnyClickStyle();
     return element;
   }
 
@@ -111,13 +111,17 @@ const dom = (() => {
     todos.myTodos.sort((a, b) => {
       return a.dueDate < b.dueDate ? -1 : b.dueDate > a.dueDate ? 1 : 0;
     });
+    todos.myTodos.sort((a, b) => {
+      return a.active - b.active;
+    });
 
     todos.myTodos.forEach((todo) => {
       if (todo.project == project) {
         const eachTodo = document.createElement("div");
+        const right = document.createElement("div");
         const div = document.createElement("div");
         eachTodo.classList.add("todo");
-        eachTodo.appendChild(div);
+        right.appendChild(div);
 
         const task = document.createElement("p");
         task.textContent = todo.name;
@@ -137,7 +141,7 @@ const dom = (() => {
         buttons.appendChild(deleteBtn);
         div.appendChild(buttons);
 
-        eachTodo.appendChild(div);
+        right.appendChild(div);
 
         const bottom = document.createElement("div");
         const describe = document.createElement("p");
@@ -151,7 +155,11 @@ const dom = (() => {
           "MMMM do"
         );
         bottom.appendChild(date);
-        eachTodo.appendChild(bottom);
+        right.appendChild(bottom);
+        const deactivate = document.createElement("button");
+        deactivate.textContent = "-";
+        eachTodo.appendChild(deactivate);
+        eachTodo.appendChild(right);
         element.appendChild(eachTodo);
       }
     });
