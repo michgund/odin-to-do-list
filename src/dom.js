@@ -118,30 +118,32 @@ const dom = (() => {
     todos.myTodos.forEach((todo) => {
       if (todo.project == project) {
         const eachTodo = document.createElement("div");
-        const right = document.createElement("div");
-        const div = document.createElement("div");
+        const infoDiv = document.createElement("div");
+        const infoDivLeft = document.createElement("div");
+        const infoDivRight = document.createElement("div");
+        const NameNPrio = document.createElement("div");
         eachTodo.classList.add("todo");
-        right.appendChild(div);
 
         const task = document.createElement("p");
         task.textContent = todo.name;
-        div.appendChild(task);
+        NameNPrio.appendChild(task);
 
         const prio = document.createElement("p");
         prio.textContent = `${todo.priority} priority`;
-        div.appendChild(prio);
+        NameNPrio.appendChild(prio);
+
+        infoDivLeft.appendChild(NameNPrio);
 
         const buttons = document.createElement("div");
+        buttons.classList.add("todo-btn-div");
         const editBtn = document.createElement("button");
         editBtn.textContent = "Edit";
         buttons.appendChild(editBtn);
 
         const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "Delete";
+        deleteBtn.textContent = "X";
         buttons.appendChild(deleteBtn);
-        div.appendChild(buttons);
-
-        right.appendChild(div);
+        infoDivRight.appendChild(buttons);
 
         const bottom = document.createElement("div");
         const describe = document.createElement("p");
@@ -154,8 +156,10 @@ const dom = (() => {
           new Date(dateArr[0], dateArr[1], dateArr[2]),
           "MMMM do"
         );
-        bottom.appendChild(date);
-        right.appendChild(bottom);
+        infoDivRight.appendChild(date);
+        infoDivLeft.appendChild(bottom);
+        infoDiv.appendChild(infoDivLeft);
+        infoDiv.appendChild(infoDivRight);
         const deactivate = document.createElement("button");
         // deactivate.classList.add("deactivate");
         deactivate.addEventListener("click", () => {
@@ -163,15 +167,18 @@ const dom = (() => {
           createTodoDiv(project);
         });
         if (!todo.active) {
-          //   right.style.opacity = "0.2";
-          //   right.style.textDecoration = "line-through";
-          right.className = "deactive";
+          //   infoDiv.style.opacity = "0.2";
+          //   infoDiv.style.textDecoration = "line-through";
+          infoDiv.className = "deactive";
           deactivate.textContent = "+";
+          editBtn.remove();
+          deleteBtn.remove();
         } else {
           deactivate.textContent = "-";
         }
         eachTodo.appendChild(deactivate);
-        eachTodo.appendChild(right);
+        // infoDiv.appendChild(buttons);
+        eachTodo.appendChild(infoDiv);
         element.appendChild(eachTodo);
       }
     });

@@ -160,6 +160,7 @@ textarea {
   padding: 1vh;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   gap: 1em;
 }
@@ -172,20 +173,28 @@ textarea {
 
 .todo > div {
   display: flex;
-  flex-direction: column;
+  gap: 1em;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
 }
 
 .todo > div > div:first-of-type {
   display: flex;
+  flex: 4;
+  width: 100%;
+  flex-direction: column;
   justify-content: space-between;
 }
 
-.todo > div > div:nth-of-type(2) {
-  font-size: 0.8em;
-  gap: 1em;
+.todo > div > div:first-of-type > div:first-of-type {
   display: flex;
   justify-content: space-between;
+}
+
+.todo > div > div:first-of-type > div:nth-of-type(2) {
+  font-size: 0.8em;
+  /* background-color: red; */
 }
 
 .deactive {
@@ -194,4 +203,24 @@ textarea {
   background-position: center center;
   background-size: 100% 100%, auto;
   opacity: 0.5;
+}
+
+.todo > div > div:nth-of-type(2) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+  font-size: 0.8em;
+  text-align: right;
+  align-self: flex-start;
+}
+
+.todo > div > div:nth-of-type(2) > div {
+  display: flex;
+  align-self: flex-end;
+  gap: 0.5em;
+}
+
+.todo > div > div:nth-of-type(2) > div > button {
+  align-self: flex-end;
 }
