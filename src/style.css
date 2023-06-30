@@ -121,6 +121,7 @@ textarea {
   margin: 2vh auto;
   background-color: whitesmoke;
   border-radius: 5px;
+  overflow: scroll;
 }
 
 .todo-div > h1 {

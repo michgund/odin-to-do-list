@@ -33,7 +33,7 @@ const todos = (() => {
       createNewTodo(
         "Todo list",
         "Finish todo list",
-        "To finish this todo list I still need to implement the dates and also be able to edit and delete",
+        "To finish this todo list.. Some stuff needs to be done, but can finish it by today",
         "High",
         "2023-11-24",
         true,
@@ -43,12 +43,78 @@ const todos = (() => {
     addTodo(
       createNewTodo(
         "Todo list",
-        "Do some stuff",
-        "Add lorem ipsum but be done writing but how about some filters too?",
+        "Fix the dates",
+        "When editing the todo, didn't the dates mess up?",
         "Low",
         "2023-10-12",
         true,
         1
+      )
+    );
+    addTodo(
+      createNewTodo(
+        "Todo list",
+        "Local storage",
+        "Add it",
+        "Medium",
+        "2023-10-12",
+        true,
+        2
+      )
+    );
+    addTodo(
+      createNewTodo(
+        "Todo list",
+        "Projects",
+        "Need to be able to edit project names and delete them",
+        "Medium",
+        "2023-10-12",
+        true,
+        3
+      )
+    );
+    addTodo(
+      createNewTodo(
+        "Todo list",
+        "Filter",
+        "How about being able to filter the tasks by priority OR dates (sort by prio on same dates as well)?",
+        "Medium",
+        "2023-10-12",
+        true,
+        4
+      )
+    );
+    addTodo(
+      createNewTodo(
+        "Todo list",
+        "Scroll",
+        "Hey, what happens if there are more than screen size of todos?",
+        "Medium",
+        "2023-10-12",
+        false,
+        5
+      )
+    );
+    addTodo(
+      createNewTodo(
+        "Todo list",
+        "Home page",
+        "Home page should show all todos",
+        "Medium",
+        "2023-10-12",
+        true,
+        6
+      )
+    );
+    addTodo(
+      createNewTodo(
+        "Learn React",
+        "New task",
+        "Should be able to view all todos from homepage",
+        "Medium",
+        "2023-10-12",
+        true,
+        7
       )
     );
   }

@@ -123,7 +123,7 @@ const dom = (() => {
     });
 
     todos.myTodos.forEach((todo) => {
-      if (todo.project == project) {
+      if (todo.project == project || project == "All") {
         const eachTodo = document.createElement("div");
         const infoDiv = document.createElement("div");
         const infoDivLeft = document.createElement("div");
@@ -157,7 +157,10 @@ const dom = (() => {
 
         const bottom = document.createElement("div");
         const describe = document.createElement("p");
-        describe.textContent = todo.description;
+        describe.textContent =
+          project == "All"
+            ? `From "${todo.project}" project`
+            : todo.description;
         bottom.appendChild(describe);
         const date = document.createElement("p");
         let dateArr = todo.dueDate.split("-");
