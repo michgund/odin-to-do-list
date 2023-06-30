@@ -21,7 +21,7 @@ const dom = (() => {
 
   function createHomeTab() {
     const element = document.createElement("div");
-    element.className = "tab project-tab home down";
+    element.className = "tab project-tab home";
     element.textContent = "Home";
     return element;
   }
@@ -32,7 +32,7 @@ const dom = (() => {
     document.querySelector(".tabs").appendChild(newProjectTab());
     projects.myProjects.forEach((project) => {
       const element = document.createElement("div");
-      element.className = "tab project-tab down";
+      element.className = "tab project-tab";
       if (project.selected == true) {
         element.classList.add("selected");
       }
@@ -54,7 +54,14 @@ const dom = (() => {
     const dialog = document.createElement("dialog");
     dialog.setAttribute("id", "todoDialog");
     dialog.innerHTML =
-      '<form method="dialog"> <p> <label for="todo">Task:</label><input type="text" name="todo" id="todo"></p><p> <label for="description">Todo Description:</label><textarea name="description" id="description"></textarea></p><p> <label for="priority">Priority</label> <select id="priority" name="priority"> <option selected disabled>Choose</option> <option>Low</option> <option>Medium</option> <option>High</option> </select> </p><p> <label for="dueDate">Date due:</label><input type="date" id="dueDate" name="dueDate"></p> <div> <button class="down" id="todoCancel" type="reset">Cancel</button> <button class="down" type="submit">Confirm</button> </div> </form>';
+      '<form method="dialog"> <p> <label for="todo">Task:</label><input type="text" name="todo" class="task"></p><p> <label for="description">Todo Description:</label><textarea name="description" class="description"></textarea></p><p> <label for="priority">Priority</label> <select class="priority" name="priority"> <option selected disabled>Choose</option> <option>Low</option> <option>Medium</option> <option>High</option> </select> </p><p> <label for="dueDate">Date due:</label><input type="date" class="dueDate" name="dueDate"></p> <div> <button class="down cancel" type="reset">Cancel</button> <button class="down" type="submit">Confirm</button> </div> </form>';
+    return dialog;
+  }
+
+  function createTodoEditModal(todo) {
+    const dialog = document.createElement("dialog");
+    dialog.setAttribute("id", `dialog${todo.id}`);
+    dialog.innerHTML = `<form method="dialog"> <p> <label for="todo">Task:</label><input type="text" name="todo" class="task" value="${todo.name}"></p><p> <label for="description">Todo Description:</label><textarea name="description" class="description">${todo.description}</textarea></p><p> <label for="priority">Priority</label> <select class="priority" name="priority"> <option selected disabled>Choose</option> <option>Low</option> <option>Medium</option> <option>High</option> </select> </p><p> <label for="dueDate">Date due:</label><input type="date" class="dueDate" name="dueDate" value="${todo.dueDate}"></p> <div> <button class="down cancel" type="reset">Cancel</button> <button class="down" type="submit">Confirm</button> </div> </form>`;
     return dialog;
   }
 
@@ -137,14 +144,14 @@ const dom = (() => {
         const buttons = document.createElement("div");
         buttons.classList.add("todo-btn-div");
         const editBtn = document.createElement("div");
-        editBtn.className = "active-btn";
+        editBtn.className = "active-btn down";
 
         editBtn.textContent = "Edit";
         buttons.appendChild(editBtn);
 
         const deleteBtn = document.createElement("div");
         deleteBtn.textContent = "X";
-        deleteBtn.className = "active-btn";
+        deleteBtn.className = "active-btn down";
         buttons.appendChild(deleteBtn);
         infoDivRight.appendChild(buttons);
 
@@ -178,11 +185,18 @@ const dom = (() => {
           deleteBtn.className = "";
         } else {
           deactivate.textContent = "-";
+          editBtn.addEventListener("click", () => {
+            handlers.handleTodoEdit(todo);
+          });
+          deleteBtn.addEventListener("click", () => {
+            handlers.handleTodoDelete(todo);
+          });
         }
         eachTodo.appendChild(deactivate);
         // infoDiv.appendChild(buttons);
         eachTodo.appendChild(infoDiv);
         element.appendChild(eachTodo);
+        element.appendChild(createTodoEditModal(todo));
       }
     });
     return element;

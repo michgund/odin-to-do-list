@@ -19,7 +19,7 @@ const handlers = (() => {
   }
 
   function handleAnyClickStyle() {
-    const btns = document.querySelectorAll("button");
+    const btns = document.querySelectorAll(".down");
     btns.forEach((btn) => {
       btn.addEventListener("mousedown", () => {
         btn.classList.add("clicked");
@@ -27,7 +27,6 @@ const handlers = (() => {
           btn.classList.remove("clicked");
         });
       });
-      //   btn.addEventListener("mousedown", () => {});
     });
   }
 
@@ -83,11 +82,12 @@ const handlers = (() => {
             todos.addTodo(
               todos.createNewTodo(
                 element.name,
-                todo.value,
-                description.value,
-                priority.value,
-                dueDate.value,
-                true
+                form.querySelector(".task").value,
+                form.querySelector(".description").value,
+                form.querySelector(".priority").value,
+                form.querySelector(".dueDate").value,
+                true,
+                todos.myTodos.length
               )
             );
             dom.createTodoDiv(element.name);
@@ -101,71 +101,66 @@ const handlers = (() => {
     });
   }
 
-  function validateTodo(x) {
-    const todoForm = document.querySelector("#todoDialog>form");
-    const dateArr = dueDate.value.split("-");
-
-    let nameValid = todo.value ? true : false,
-      descriptionValid = description.value ? true : false,
-      priorityValid = priority.value != "Choose" ? true : false,
-      dateValid = isFuture(new Date(dateArr[0], dateArr[1], dateArr[2]))
-        ? true
-        : false;
+  function validateTodo(form) {
+    const dateArr = form.querySelector(".dueDate").value.split("-");
+    let nameValid = form.querySelector(".task").value ? true : false;
+    let descriptionValid = form.querySelector(".description").value
+      ? true
+      : false;
+    let priorityValid =
+      form.querySelector(".priority").value != "Choose" ? true : false;
+    let dateValid = isFuture(new Date(dateArr[0], dateArr[1], dateArr[2]))
+      ? true
+      : false;
 
     // Validate task name
-    if (!nameValid && !document.querySelector("#nameWarning")) {
+    if (!nameValid && !form.querySelector(".nameWarning")) {
       const nameWarning = document.createElement("span");
-      nameWarning.setAttribute("id", "nameWarning");
+      nameWarning.classList.add("nameWarning");
       nameWarning.style.color = "red";
       nameWarning.textContent = "Please give your task a name.";
-      todoForm.insertBefore(
-        nameWarning,
-        todoForm.querySelector("p:nth-of-type(2)")
-      );
-    } else if (nameValid && document.querySelector("#nameWarning")) {
-      document.querySelector("#nameWarning").remove();
+      form.insertBefore(nameWarning, form.querySelector("p:nth-of-type(2)"));
+    } else if (nameValid && form.querySelector(".nameWarning")) {
+      form.querySelector(".nameWarning").remove();
     }
 
     //validate task description
-    if (!descriptionValid && !document.querySelector("#descriptionWarning")) {
+    if (!descriptionValid && !form.querySelector(".descriptionWarning")) {
       const descriptionWarning = document.createElement("span");
-      descriptionWarning.setAttribute("id", "descriptionWarning");
+      descriptionWarning.classList.add("descriptionWarning");
       descriptionWarning.style.color = "red";
       descriptionWarning.textContent = "Please give your task a description.";
-      todoForm.insertBefore(
+      form.insertBefore(
         descriptionWarning,
-        todoForm.querySelector("p:nth-of-type(3)")
+        form.querySelector("p:nth-of-type(3)")
       );
-    } else if (
-      descriptionValid &&
-      document.querySelector("#descriptionWarning")
-    ) {
-      document.querySelector("#descriptionWarning").remove();
+    } else if (descriptionValid && form.querySelector(".descriptionWarning")) {
+      form.querySelector(".descriptionWarning").remove();
     }
 
     //validate task priority
-    if (!priorityValid && !document.querySelector("#priorityWarning")) {
+    if (!priorityValid && !form.querySelector(".priorityWarning")) {
       const priorityWarning = document.createElement("span");
-      priorityWarning.setAttribute("id", "priorityWarning");
+      priorityWarning.classList.add("priorityWarning");
       priorityWarning.style.color = "red";
       priorityWarning.textContent = "Please give your task a priority.";
-      todoForm.insertBefore(
+      form.insertBefore(
         priorityWarning,
-        todoForm.querySelector("p:nth-of-type(4)")
+        form.querySelector("p:nth-of-type(4)")
       );
-    } else if (priorityValid && document.querySelector("#priorityWarning")) {
-      document.querySelector("#priorityWarning").remove();
+    } else if (priorityValid && form.querySelector(".priorityWarning")) {
+      form.querySelector(".priorityWarning").remove();
     }
 
     //validate task date
-    if (!dateValid && !document.querySelector("#dateWarning")) {
+    if (!dateValid && !form.querySelector(".dateWarning")) {
       const dateWarning = document.createElement("span");
-      dateWarning.setAttribute("id", "dateWarning");
+      dateWarning.classList.add("dateWarning");
       dateWarning.style.color = "red";
       dateWarning.textContent = "Please set a due date in the future.";
-      todoForm.insertBefore(dateWarning, todoForm.querySelector("div"));
-    } else if (dateValid && document.querySelector("#dateWarning")) {
-      document.querySelector("#dateWarning").remove();
+      form.insertBefore(dateWarning, form.querySelector("div"));
+    } else if (dateValid && form.querySelector(".dateWarning")) {
+      form.querySelector(".dateWarning").remove();
     }
 
     if (nameValid && descriptionValid && priorityValid && dateValid) {
@@ -178,7 +173,7 @@ const handlers = (() => {
     dialog.showModal();
     handleNewTodoSubmit();
 
-    document.querySelector("#todoCancel").addEventListener("click", () => {
+    dialog.querySelector(".cancel").addEventListener("click", () => {
       const warnings = dialog.querySelectorAll("span");
       warnings.forEach((warning) => warning.remove());
       dialog.close();
@@ -206,6 +201,48 @@ const handlers = (() => {
     });
   }
 
+  function handleTodoEdit(todo) {
+    const dialog = document.querySelector(`#dialog${todo.id}`);
+    dialog.showModal();
+    handleTodoEditSubmit(todo);
+
+    dialog.querySelector(".cancel").addEventListener("click", () => {
+      const warnings = dialog.querySelectorAll("span");
+      warnings.forEach((warning) => warning.remove());
+      dialog.close();
+    });
+  }
+
+  function handleTodoEditSubmit(todo) {
+    const form = document.querySelector(`#dialog${todo.id}>form`);
+    form.addEventListener("submit", (e) => {
+      console.log("edit");
+      projects.myProjects.forEach((element) => {
+        if (element.selected) {
+          console.log(element);
+          console.log(form);
+          if (validateTodo(form)) {
+            console.log("valid");
+            todos.editTodo(form);
+            dom.createTodoDiv(element.name);
+            form.reset();
+            document.querySelector(`#dialog${todo.id}`).close();
+          }
+        } else {
+          e.preventDefault();
+        }
+      });
+    });
+  }
+
+  function handleTodoDelete(todo) {
+    //TODO: Modal for delete?
+    if (confirm("Are you sure? This action cannot be undone.")) {
+      todos.deleteTodo(todo.id);
+      dom.createTodoDiv(todo.project);
+    }
+  }
+
   function handleTodoDeactivate(todo) {
     todo.active = todo.active ? false : true;
   }
@@ -218,6 +255,8 @@ const handlers = (() => {
     handleAnyClickStyle,
     handleNewTodoSubmit,
     handleTodoDeactivate,
+    handleTodoEdit,
+    handleTodoDelete,
   };
 })();
 
