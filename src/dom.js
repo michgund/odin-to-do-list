@@ -99,11 +99,11 @@ const dom = (() => {
     const h1 = document.createElement("h1");
     h1.textContent = `${project} todo's`;
     if (project != "All") {
-      const btn = document.createElement("button");
-      btn.textContent = "+";
-      btn.className = "new-todo down";
-      btn.addEventListener("click", handlers.handleNewTodoClick);
-      h1.appendChild(btn);
+      const addBtn = document.createElement("button");
+      addBtn.textContent = "+";
+      addBtn.className = "new-todo down";
+      addBtn.addEventListener("click", handlers.handleNewTodoClick);
+      h1.appendChild(addBtn);
     }
     element.appendChild(h1);
     document.body.appendChild(element);
@@ -174,7 +174,7 @@ const dom = (() => {
         infoDiv.appendChild(infoDivLeft);
         infoDiv.appendChild(infoDivRight);
         const deactivate = document.createElement("button");
-        // deactivate.classList.add("deactivate");
+        deactivate.classList.add("down");
         deactivate.addEventListener("click", () => {
           handlers.handleTodoDeactivate(todo);
           createTodoDiv(project);
