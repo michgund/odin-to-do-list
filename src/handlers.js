@@ -10,9 +10,10 @@ const handlers = (() => {
     handleNewProjectSubmit();
 
     document.querySelector("#projectCancel").addEventListener("click", () => {
-      //   dialog.nextElementSibling.reset();
-      if (document.querySelector("#warning")) {
-        document.querySelector("#warning").remove();
+      if (dialog.querySelector(".warning")) {
+        dialog
+          .querySelectorAll(".warning")
+          .forEach((warning) => warning.remove());
       }
       dialog.close();
     });
@@ -46,8 +47,10 @@ const handlers = (() => {
         dom.populateTabBar();
         form.reset();
         document.querySelector("#projectDialog").close();
-        if (document.querySelector("#warning")) {
-          document.querySelector("#warning").remove();
+        if (form.querySelector(".warning")) {
+          form
+            .querySelectorAll(".warning")
+            .forEach((warning) => warning.remove());
         }
       }
     });
@@ -55,13 +58,31 @@ const handlers = (() => {
 
   function validateProject(newProject) {
     const form = document.querySelector("#projectDialog>form");
+    if (form.querySelector(".warning")) {
+      form.querySelectorAll(".warning").forEach((warning) => warning.remove());
+    }
+    if (newProject.length > 30) {
+      if (!form.querySelector("#longWarning")) {
+        const warning = document.createElement("p");
+        warning.setAttribute("id", "longWarning");
+        warning.classList.add("warning");
+        warning.style.color = "red";
+        warning.textContent =
+          "Please keep the project name less than 30 characters.";
+        form.insertBefore(warning, form.firstElementChild.nextElementSibling);
+      }
+      return false;
+    } else if (newProject.length < 30 && form.querySelector("#longWarning")) {
+      form.querySelector("#nameWarning").remove();
+    }
     let uniqueProject = true;
     projects.myProjects.forEach((element) => {
       if (element.name == newProject) {
         uniqueProject = false;
-        if (!document.querySelector("#warning")) {
+        if (!document.querySelector("#nameWarning")) {
           const warning = document.createElement("p");
-          warning.setAttribute("id", "warning");
+          warning.setAttribute("id", "nameWarning");
+          warning.classList.add("warning");
           warning.style.color = "red";
           warning.textContent =
             "Project already exists! Please use a different name to identify a unique project.";

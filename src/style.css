@@ -46,6 +46,7 @@ body {
   background-color: gray;
   color: cyan;
   border-radius: 5px 5px 0 0;
+  word-break: break-all;
 }
 
 .tab:hover {

@@ -102,7 +102,7 @@ const todos = (() => {
         "Home page should show all todos",
         "Medium",
         "2023-10-12",
-        true,
+        false,
         6
       )
     );
