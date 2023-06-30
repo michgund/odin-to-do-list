@@ -142,6 +142,7 @@ textarea {
   color: gray;
   display: flex;
   justify-content: space-between;
+  text-align: center;
   flex-wrap: nowrap;
   align-items: center;
   width: 100%;

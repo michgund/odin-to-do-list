@@ -74,6 +74,14 @@ const dom = (() => {
     return element;
   }
 
+  function createProjectEditModal(project) {
+    const dialog = document.createElement("dialog");
+    // console.log(projects.getID(project));
+    dialog.setAttribute("id", `projectEdit${projects.getID(project)}`);
+    dialog.innerHTML = `<form method="dialog"> <p> <label for="project">Project Name:</label><input type="text" name="project" class="project" value="${project}"> </p> <div> <button class="down cancel" type="reset">Cancel</button> <button class="down" type="submit">Confirm</button> </div> </form>`;
+    return dialog;
+  }
+
   function initialisePage() {
     document.body.appendChild(createBanner());
     document.body.appendChild(createTabBar());
@@ -99,6 +107,17 @@ const dom = (() => {
     const h1 = document.createElement("h1");
     h1.textContent = `${project} todo's`;
     if (project != "All") {
+      const editBtn = document.createElement("button");
+      editBtn.textContent = "Edit";
+      editBtn.className = "new-todo down";
+      editBtn.style.fontSize = "0.8em";
+      editBtn.addEventListener("click", () => {
+        handlers.handleProjectEdit(project);
+      });
+      let dialogExists = document.querySelector('[id^="projectEdit"]');
+      if (dialogExists) dialogExists.remove();
+      document.body.appendChild(createProjectEditModal(project));
+      h1.insertBefore(editBtn, h1.firstChild);
       const addBtn = document.createElement("button");
       addBtn.textContent = "+";
       addBtn.className = "new-todo down";

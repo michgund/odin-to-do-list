@@ -37,13 +37,19 @@ const handlers = (() => {
       // form was submitting to quickly or something like that, so had to check if string is empty to prevent double submission(?)
       // also add "home" because all todo's are "home".. Quick troubleshooting.. //TODO fix.
       if (
-        !validateProject(project.value) ||
+        !validateProject(project.value, form) ||
         project.value == "" ||
         project.value == "Home"
       ) {
         e.preventDefault();
       } else {
-        projects.addProject(projects.createNewProject(project.value));
+        projects.addProject(
+          projects.createNewProject(
+            project.value,
+            false,
+            projects.myProjects.length
+          )
+        );
         dom.populateTabBar();
         form.reset();
         document.querySelector("#projectDialog").close();
@@ -56,8 +62,8 @@ const handlers = (() => {
     });
   }
 
-  function validateProject(newProject) {
-    const form = document.querySelector("#projectDialog>form");
+  function validateProject(newProject, form) {
+    // const form = document.querySelector("#projectDialog>form");
     if (form.querySelector(".warning")) {
       form.querySelectorAll(".warning").forEach((warning) => warning.remove());
     }
@@ -216,7 +222,8 @@ const handlers = (() => {
             ? (project.selected = true)
             : (project.selected = false)
         );
-        // console.log(projects.myProjects);
+        console.log(projects.myProjects);
+        console.log(todos.myTodos);
         element.classList.add("selected");
       });
     });
@@ -260,12 +267,58 @@ const handlers = (() => {
     //TODO: Modal for delete?
     if (confirm("Are you sure? This action cannot be undone.")) {
       todos.deleteTodo(todo.id);
+      todos.redoTodoIDs();
       dom.createTodoDiv(todo.project);
     }
   }
 
   function handleTodoDeactivate(todo) {
     todo.active = todo.active ? false : true;
+  }
+
+  function handleProjectEditSubmit(project) {
+    const form = document.querySelector(
+      `#projectEdit${projects.getID(project)}>form`
+    );
+    form.addEventListener("submit", (e) => {
+      let newProject = form.querySelector(".project").value;
+      console.log("edit");
+      projects.myProjects.forEach((element) => {
+        if (
+          element.id == projects.getID(project) &&
+          validateProject(newProject, form)
+        ) {
+          //   console.log(element);
+          //   console.log(form);
+          //   console.log("valid");
+          projects.editProject(project, newProject);
+          dom.populateTabBar();
+          dom.createTodoDiv(newProject);
+          form.reset();
+          form.parentElement.close();
+        } else {
+          e.preventDefault();
+        }
+      });
+    });
+  }
+
+  function handleProjectEdit(project) {
+    const dialog = document.querySelector(
+      `#projectEdit${projects.getID(project)}`
+    );
+    // console.log(dialogs);
+    dialog.showModal();
+    handleProjectEditSubmit(project);
+
+    dialog.querySelector(".cancel").addEventListener("click", () => {
+      if (dialog.querySelector(".warning")) {
+        dialog
+          .querySelectorAll(".warning")
+          .forEach((warning) => warning.remove());
+      }
+      dialog.close();
+    });
   }
 
   return {
@@ -278,6 +331,7 @@ const handlers = (() => {
     handleTodoDeactivate,
     handleTodoEdit,
     handleTodoDelete,
+    handleProjectEdit,
   };
 })();
 

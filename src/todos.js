@@ -155,6 +155,19 @@ const todos = (() => {
     }
   }
 
+  function redoTodoIDs() {
+    for (let i = 0; i < myTodos.length; i++) {
+      myTodos[i].id = i;
+    }
+  }
+
+  function editTodoProject(project, newProject) {
+    myTodos.forEach((todo) => {
+      if (todo.project == project) {
+        todo.project = newProject;
+      }
+    });
+  }
   return {
     createNewTodo,
     addTodo,
@@ -163,6 +176,8 @@ const todos = (() => {
     fetchTodos,
     editTodo,
     deleteTodo,
+    redoTodoIDs,
+    editTodoProject,
   };
 })();
 
