@@ -46,6 +46,16 @@ const projects = (() => {
     todos.editTodoProject(project, newProject);
   }
 
+  function deleteProject(project) {
+    // console.log(myProjects);
+    for (let i = 0; i < myProjects.length; i++) {
+      if (myProjects[i].name == project) {
+        myProjects.splice(i, 1);
+      }
+    }
+    todos.deleteProjectTodos(project);
+  }
+
   return {
     createNewProject,
     addProject,
@@ -53,6 +63,7 @@ const projects = (() => {
     createSome,
     getID,
     editProject,
+    deleteProject,
   };
 })();
 

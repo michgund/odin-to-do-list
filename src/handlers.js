@@ -311,6 +311,21 @@ const handlers = (() => {
     dialog.showModal();
     handleProjectEditSubmit(project);
 
+    dialog.querySelector(".delete").addEventListener("click", (e) => {
+      e.preventDefault();
+      console.log("delete");
+      if (
+        confirm(
+          "Are you sure you wish to delete this project? All of the project todo's will be deleted as well. This action cannot be undone."
+        )
+      ) {
+        projects.deleteProject(project);
+        dom.populateTabBar();
+        dom.createTodoDiv("All");
+        dialog.close();
+      }
+    });
+
     dialog.querySelector(".cancel").addEventListener("click", () => {
       if (dialog.querySelector(".warning")) {
         dialog

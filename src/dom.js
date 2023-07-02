@@ -78,7 +78,7 @@ const dom = (() => {
     const dialog = document.createElement("dialog");
     // console.log(projects.getID(project));
     dialog.setAttribute("id", `projectEdit${projects.getID(project)}`);
-    dialog.innerHTML = `<form method="dialog"> <p> <label for="project">Project Name:</label><input type="text" name="project" class="project" value="${project}"> </p> <div> <button class="down cancel" type="reset">Cancel</button> <button class="down" type="submit">Confirm</button> </div> </form>`;
+    dialog.innerHTML = `<form method="dialog"> <p> <label for="project">Project Name:</label><input type="text" name="project" class="project" value="${project}"> </p> <div><button class="down delete">Delete project</button>  <button class="down cancel" type="reset">Cancel edit</button> <button class="down" type="submit">Confirm edit</button> </div> </form>`;
     return dialog;
   }
 

@@ -168,6 +168,17 @@ const todos = (() => {
       }
     });
   }
+
+  function deleteProjectTodos(project) {
+    let max = myTodos.length;
+    for (let i = 0; i < max; i++) {
+      if (myTodos[i] && myTodos[i].project == project) {
+        myTodos.splice(i, 1);
+        i--;
+      }
+    }
+  }
+
   return {
     createNewTodo,
     addTodo,
@@ -178,6 +189,7 @@ const todos = (() => {
     deleteTodo,
     redoTodoIDs,
     editTodoProject,
+    deleteProjectTodos,
   };
 })();
 
