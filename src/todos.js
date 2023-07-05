@@ -1,5 +1,4 @@
-import dom from "./dom";
-import handlers from "./handlers";
+import localStorages from "./localStorage";
 
 const todos = (() => {
   let myTodos = [];
@@ -25,98 +24,41 @@ const todos = (() => {
   }
 
   function addTodo(todo) {
-    myTodos.push(todo);
+    console.log(todo);
+    localStorages.populateStorage(todo);
+    // pushTodo(todo);
   }
 
-  function createSome() {
-    addTodo(
-      createNewTodo(
-        "Todo list",
-        "Finish todo list",
-        "To finish this todo list.. Some stuff needs to be done, but can finish it by today",
-        "High",
-        "2023-11-24",
-        true,
-        0
-      )
-    );
-    addTodo(
-      createNewTodo(
-        "Todo list",
-        "Fix the dates",
-        "When editing the todo, didn't the dates mess up?",
-        "Low",
-        "2023-10-12",
-        true,
-        1
-      )
-    );
-    addTodo(
-      createNewTodo(
-        "Todo list",
-        "Local storage",
-        "Add it",
-        "Medium",
-        "2023-10-12",
-        true,
-        2
-      )
-    );
-    addTodo(
-      createNewTodo(
-        "Todo list",
-        "Projects",
-        "Need to be able to edit project names and delete them",
-        "Medium",
-        "2023-10-12",
-        true,
-        3
-      )
-    );
-    addTodo(
-      createNewTodo(
-        "Todo list",
-        "Filter",
-        "How about being able to filter the tasks by priority OR dates (sort by prio on same dates as well)?",
-        "Medium",
-        "2023-10-12",
-        true,
-        4
-      )
-    );
-    addTodo(
-      createNewTodo(
-        "Todo list",
-        "Scroll",
-        "Hey, what happens if there are more than screen size of todos?",
-        "Medium",
-        "2023-10-12",
-        false,
-        5
-      )
-    );
-    addTodo(
-      createNewTodo(
-        "Todo list",
-        "Home page",
-        "Home page should show all todos",
-        "Medium",
-        "2023-10-12",
-        false,
-        6
-      )
-    );
-    addTodo(
-      createNewTodo(
-        "Learn React",
-        "New task",
-        "Should be able to view all todos from homepage",
-        "Medium",
-        "2023-10-12",
-        true,
-        7
-      )
-    );
+  //   function pushTodo(todo) {
+  //     myTodos.push(todo);
+  //   }
+
+  function convertPriority(priority) {
+    if (isNaN(priority)) {
+      switch (priority) {
+        case "Low":
+          return 0;
+          break;
+        case "Medium":
+          return 1;
+          break;
+        case "High":
+          return 2;
+          break;
+      }
+    } else {
+      switch (priority) {
+        case 0:
+          return "Low";
+          break;
+        case 1:
+          return "Medium";
+          break;
+        case 2:
+          return "High";
+          break;
+      }
+    }
   }
 
   function fetchTodos(project) {
@@ -129,20 +71,34 @@ const todos = (() => {
     return projectTodo;
   }
 
+  function fetchStoredTodos() {
+    myTodos = [];
+    let counter = 0;
+    while (localStorages.retrieveStorage(counter)) {
+      //   console.log(localStorages.retrieveStorage(counter));
+      myTodos.push(localStorages.retrieveStorage(counter));
+      counter++;
+    }
+    return myTodos;
+  }
+
   function editTodo(form) {
     // console.log(form);
     let newName = form.querySelector(".task").value,
       newDescription = form.querySelector(".description").value,
-      newPriority = form.querySelector(".priority").value,
+      newPriority = convertPriority(form.querySelector(".priority").value),
       newDate = form.querySelector(".dueDate").value,
       todoID = form.parentElement.id.slice(6);
-
+    console.log(myTodos);
     myTodos.forEach((oldTodo) => {
       if (oldTodo.id == todoID) {
+        console.log(oldTodo);
         oldTodo.name = newName;
         oldTodo.description = newDescription;
         oldTodo.priority = newPriority;
         oldTodo.dueDate = newDate;
+        console.log(oldTodo);
+        localStorages.editStorageItem(oldTodo);
       }
     });
   }
@@ -151,6 +107,7 @@ const todos = (() => {
     for (let i = 0; i < myTodos.length; i++) {
       if (myTodos[i].id == id) {
         myTodos.splice(i, 1);
+        localStorage.removeItem(id);
       }
     }
   }
@@ -165,31 +122,33 @@ const todos = (() => {
     myTodos.forEach((todo) => {
       if (todo.project == project) {
         todo.project = newProject;
+        localStorages.editStorageItem(todo);
       }
     });
   }
 
   function deleteProjectTodos(project) {
-    let max = myTodos.length;
-    for (let i = 0; i < max; i++) {
-      if (myTodos[i] && myTodos[i].project == project) {
-        myTodos.splice(i, 1);
-        i--;
-      }
-    }
+    let projectTodos = fetchTodos(project);
+    console.log(projectTodos);
+    projectTodos.forEach((element) => localStorage.removeItem(element.id));
+    // console.log(myTodos[i]);
+    // localStorage.removeItem(myTodos[i].id);
+    // myTodos.splice(i, 1);
+    // i--;
   }
 
   return {
     createNewTodo,
     addTodo,
     myTodos,
-    createSome,
     fetchTodos,
     editTodo,
     deleteTodo,
     redoTodoIDs,
     editTodoProject,
     deleteProjectTodos,
+    convertPriority,
+    fetchStoredTodos,
   };
 })();
 

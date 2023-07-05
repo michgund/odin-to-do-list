@@ -2,6 +2,7 @@ import dom from "./dom";
 import projects from "./projects";
 import todos from "./todos";
 import { isFuture, isValid } from "date-fns";
+import localStorages from "./localStorage";
 
 const handlers = (() => {
   function handleNewProjectClick() {
@@ -47,7 +48,7 @@ const handlers = (() => {
           projects.createNewProject(
             project.value,
             false,
-            projects.myProjects.length
+            projects.myProjects.length ? projects.myProjects.length : 0
           )
         );
         dom.populateTabBar();
@@ -82,26 +83,32 @@ const handlers = (() => {
       form.querySelector("#nameWarning").remove();
     }
     let uniqueProject = true;
-    projects.myProjects.forEach((element) => {
-      if (element.name == newProject) {
-        uniqueProject = false;
-        if (!document.querySelector("#nameWarning")) {
-          const warning = document.createElement("p");
-          warning.setAttribute("id", "nameWarning");
-          warning.classList.add("warning");
-          warning.style.color = "red";
-          warning.textContent =
-            "Project already exists! Please use a different name to identify a unique project.";
-          form.insertBefore(warning, form.firstElementChild.nextElementSibling);
+    if (projects.myProjects) {
+      projects.myProjects.forEach((element) => {
+        if (element.name == newProject) {
+          uniqueProject = false;
+          if (!document.querySelector("#nameWarning")) {
+            const warning = document.createElement("p");
+            warning.setAttribute("id", "nameWarning");
+            warning.classList.add("warning");
+            warning.style.color = "red";
+            warning.textContent =
+              "Project already exists! Please use a different name to identify a unique project.";
+            form.insertBefore(
+              warning,
+              form.firstElementChild.nextElementSibling
+            );
+          }
         }
-      }
-    });
+      });
+    }
     return uniqueProject;
   }
 
   function handleNewTodoSubmit() {
     const form = document.querySelector("#todoDialog>form");
     form.addEventListener("submit", (e) => {
+      e.preventDefault();
       //   e.preventDefault();
       projects.myProjects.forEach((element) => {
         if (element.selected) {
@@ -111,7 +118,7 @@ const handlers = (() => {
                 element.name,
                 form.querySelector(".task").value,
                 form.querySelector(".description").value,
-                form.querySelector(".priority").value,
+                todos.convertPriority(form.querySelector(".priority").value),
                 form.querySelector(".dueDate").value,
                 true,
                 todos.myTodos.length
@@ -121,8 +128,6 @@ const handlers = (() => {
             form.reset();
             document.querySelector("#todoDialog").close();
           }
-        } else {
-          e.preventDefault();
         }
       });
     });
@@ -244,20 +249,19 @@ const handlers = (() => {
   function handleTodoEditSubmit(todo) {
     const form = document.querySelector(`#dialog${todo.id}>form`);
     form.addEventListener("submit", (e) => {
+      e.preventDefault();
       console.log("edit");
       projects.myProjects.forEach((element) => {
         if (element.selected) {
-          console.log(element);
-          console.log(form);
+          //   console.log(element);
+          //   console.log(form);
           if (validateTodo(form)) {
-            console.log("valid");
+            // console.log("valid");
             todos.editTodo(form);
             dom.createTodoDiv(element.name);
             form.reset();
             document.querySelector(`#dialog${todo.id}`).close();
           }
-        } else {
-          e.preventDefault();
         }
       });
     });
@@ -274,6 +278,7 @@ const handlers = (() => {
 
   function handleTodoDeactivate(todo) {
     todo.active = todo.active ? false : true;
+    localStorages.editStorageItem(todo);
   }
 
   function handleProjectEditSubmit(project) {
@@ -282,10 +287,14 @@ const handlers = (() => {
     );
     form.addEventListener("submit", (e) => {
       let newProject = form.querySelector(".project").value;
-      console.log("edit");
+      //   console.log("edit");
+      projects.myProjects = projects.getMyProjectsArr();
+      //   console.log(projects.myProjects);
+      //   console.log(element.id);
+      //   console.log(projects.getID(project));
       projects.myProjects.forEach((element) => {
         if (
-          element.id == projects.getID(project) &&
+          element.projectID == projects.getID(project) &&
           validateProject(newProject, form)
         ) {
           //   console.log(element);

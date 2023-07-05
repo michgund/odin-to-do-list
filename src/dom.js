@@ -2,6 +2,7 @@ import projects from "./projects";
 import handlers from "./handlers";
 import todos from "./todos";
 import { format } from "date-fns";
+import localStorages from "./localStorage";
 
 const dom = (() => {
   function createBanner() {
@@ -30,16 +31,23 @@ const dom = (() => {
     document.querySelector(".tabs").innerHTML = "";
     document.querySelector(".tabs").appendChild(createHomeTab());
     document.querySelector(".tabs").appendChild(newProjectTab());
-    projects.myProjects.forEach((project) => {
-      const element = document.createElement("div");
-      element.className = "tab project-tab";
-      if (project.selected == true) {
-        element.classList.add("selected");
-      }
-      element.textContent = project.name;
-      document.querySelector(".tabs").appendChild(element);
-    });
-    handlers.handleProjectClick();
+    // console.log(localStorages.retrieveStorage("projects"));
+
+    // console.log(projects.fetchStoredProjects());
+    projects.myProjects = projects.fetchStoredProjects();
+
+    if (projects.myProjects) {
+      projects.myProjects.forEach((project) => {
+        const element = document.createElement("div");
+        element.className = "tab project-tab";
+        if (project.selected == true) {
+          element.classList.add("selected");
+        }
+        element.textContent = project.name;
+        document.querySelector(".tabs").appendChild(element);
+      });
+      handlers.handleProjectClick();
+    }
   }
 
   function createProjectModal() {
@@ -90,8 +98,9 @@ const dom = (() => {
     document.querySelector(".tabs").appendChild(newProjectTab());
     // handlers.handleNewProjectSubmit();
     // handlers.handleNewTodoSubmit();
-    projects.createSome();
-    todos.createSome();
+    // projects.createSome();
+    // todos.createSome();
+    // localStorages.resetStorage();
     populateTabBar();
     document.body.appendChild(createTodoDiv("All"));
     document.querySelector(".home").classList.add("selected");
@@ -134,6 +143,17 @@ const dom = (() => {
   function viewTodos(project) {
     // console.log(todos.myTodos);
     const element = document.createElement("div");
+
+    // todos.fetchStoredTodos();
+    todos.myTodos = todos.fetchStoredTodos();
+
+    todos.myTodos.sort((a, b) => {
+      return a.names - b.names;
+    });
+
+    todos.myTodos.sort((a, b) => {
+      return b.priority - a.priority;
+    });
     todos.myTodos.sort((a, b) => {
       return a.dueDate < b.dueDate ? -1 : b.dueDate > a.dueDate ? 1 : 0;
     });
@@ -155,7 +175,7 @@ const dom = (() => {
         NameNPrio.appendChild(task);
 
         const prio = document.createElement("p");
-        prio.textContent = `${todo.priority} priority`;
+        prio.textContent = `${todos.convertPriority(todo.priority)} priority`;
         NameNPrio.appendChild(prio);
 
         infoDivLeft.appendChild(NameNPrio);
@@ -185,7 +205,7 @@ const dom = (() => {
         let dateArr = todo.dueDate.split("-");
         // console.log(dateArr);
         date.textContent = format(
-          new Date(dateArr[0], dateArr[1], dateArr[2]),
+          new Date(dateArr[0], dateArr[1] - 1, dateArr[2]),
           "MMMM do"
         );
         infoDivRight.appendChild(date);
