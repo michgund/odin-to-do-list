@@ -131,6 +131,8 @@ const dom = (() => {
       addBtn.className = "new-todo down";
       addBtn.addEventListener("click", handlers.handleNewTodoClick);
       h1.appendChild(addBtn);
+    } else {
+      h1.classList.add("home-tab");
     }
     element.appendChild(h1);
     document.body.appendChild(element);
