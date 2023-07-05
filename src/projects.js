@@ -1,5 +1,3 @@
-import dom from "./dom";
-import handlers from "./handlers";
 import localStorages from "./localStorage";
 import todos from "./todos";
 
@@ -23,9 +21,9 @@ const projects = (() => {
 
   function addProject(project) {
     myProjects = getMyProjectsArr();
-    console.log(myProjects);
+    // console.log(myProjects);
     myProjects.push(project);
-    console.log(myProjects);
+    // console.log(myProjects);
     // console.log(myProjects);
     localStorages.populateStorage(myProjects);
     // console.log(localStorages.retrieveStorage("projects"));
@@ -66,9 +64,9 @@ const projects = (() => {
         myProject.name = newProject;
       }
     });
-    console.log(myProjects);
+    // console.log(myProjects);
     localStorages.populateStorage(myProjects);
-    console.log(localStorages.retrieveStoredProjects());
+    // console.log(localStorages.retrieveStoredProjects());
     todos.editTodoProject(project, newProject);
   }
 

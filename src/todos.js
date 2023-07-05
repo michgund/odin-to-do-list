@@ -24,7 +24,7 @@ const todos = (() => {
   }
 
   function addTodo(todo) {
-    console.log(todo);
+    // console.log(todo);
     localStorages.populateStorage(todo);
     // pushTodo(todo);
   }
@@ -89,15 +89,15 @@ const todos = (() => {
       newPriority = convertPriority(form.querySelector(".priority").value),
       newDate = form.querySelector(".dueDate").value,
       todoID = form.parentElement.id.slice(6);
-    console.log(myTodos);
+    // console.log(myTodos);
     myTodos.forEach((oldTodo) => {
       if (oldTodo.id == todoID) {
-        console.log(oldTodo);
+        // console.log(oldTodo);
         oldTodo.name = newName;
         oldTodo.description = newDescription;
         oldTodo.priority = newPriority;
         oldTodo.dueDate = newDate;
-        console.log(oldTodo);
+        // console.log(oldTodo);
         localStorages.editStorageItem(oldTodo);
       }
     });
@@ -112,11 +112,11 @@ const todos = (() => {
     }
   }
 
-  function redoTodoIDs() {
-    for (let i = 0; i < myTodos.length; i++) {
-      myTodos[i].id = i;
-    }
-  }
+  // function redoTodoIDs() {
+  //   for (let i = 0; i < myTodos.length; i++) {
+  //     myTodos[i].id = i;
+  //   }
+  // }
 
   function editTodoProject(project, newProject) {
     myTodos.forEach((todo) => {
@@ -129,7 +129,7 @@ const todos = (() => {
 
   function deleteProjectTodos(project) {
     let projectTodos = fetchTodos(project);
-    console.log(projectTodos);
+    // console.log(projectTodos);
     projectTodos.forEach((element) => localStorage.removeItem(element.id));
     // console.log(myTodos[i]);
     // localStorage.removeItem(myTodos[i].id);
@@ -144,7 +144,7 @@ const todos = (() => {
     fetchTodos,
     editTodo,
     deleteTodo,
-    redoTodoIDs,
+    // redoTodoIDs,
     editTodoProject,
     deleteProjectTodos,
     convertPriority,

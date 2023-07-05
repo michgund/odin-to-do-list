@@ -1,5 +1,3 @@
-import todos from "./todos";
-
 const localStorages = (() => {
   function storageAvailable(type) {
     let storage;
@@ -49,14 +47,6 @@ const localStorages = (() => {
     } else return false;
   }
 
-  //   function prePopulateStorage() {
-  //     todos.myTodos.forEach((todo) => {
-  //       if (storageAvailable("localStorage")) {
-  //         localStorage.setItem(todo.id, todo);
-  //       }
-  //     });
-  //   }
-
   function retrieveStorage(id) {
     // console.log("hit");
     if (storageAvailable("localStorage") && localStorage.getItem(id) != null) {
@@ -75,10 +65,10 @@ const localStorages = (() => {
   }
 
   function editStorageItem(todo) {
-    console.log(todo);
+    // console.log(todo);
     deleteStorageItem(todo);
     localStorage.setItem(todo.id, JSON.stringify(todo));
-    console.log(JSON.parse(localStorage.getItem(todo.id)));
+    // console.log(JSON.parse(localStorage.getItem(todo.id)));
   }
 
   function deleteStorageItem(todo) {
@@ -92,7 +82,7 @@ const localStorages = (() => {
       localStorage.removeItem(counter);
       counter++;
     }
-    console.log("all gone");
+    // console.log("all gone");
   }
 
   return {

@@ -2,7 +2,6 @@ import projects from "./projects";
 import handlers from "./handlers";
 import todos from "./todos";
 import { format } from "date-fns";
-import localStorages from "./localStorage";
 
 const dom = (() => {
   function createBanner() {

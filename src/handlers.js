@@ -227,8 +227,8 @@ const handlers = (() => {
             ? (project.selected = true)
             : (project.selected = false)
         );
-        console.log(projects.myProjects);
-        console.log(todos.myTodos);
+        // console.log(projects.myProjects);
+        // console.log(todos.myTodos);
         element.classList.add("selected");
       });
     });
@@ -271,7 +271,7 @@ const handlers = (() => {
     //TODO: Modal for delete?
     if (confirm("Are you sure? This action cannot be undone.")) {
       todos.deleteTodo(todo.id);
-      todos.redoTodoIDs();
+      // todos.redoTodoIDs();
       dom.createTodoDiv(todo.project);
     }
   }
@@ -322,7 +322,7 @@ const handlers = (() => {
 
     dialog.querySelector(".delete").addEventListener("click", (e) => {
       e.preventDefault();
-      console.log("delete");
+      // console.log("delete");
       if (
         confirm(
           "Are you sure you wish to delete this project? All of the project todo's will be deleted as well. This action cannot be undone."
