@@ -250,9 +250,12 @@ const handlers = (() => {
     const form = document.querySelector(`#dialog${todo.id}>form`);
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-      console.log("edit");
+      // console.log("edit");
+      let homeDiv = false;
       projects.myProjects.forEach((element) => {
+        homeDiv = true;
         if (element.selected) {
+          homeDiv = false;
           //   console.log(element);
           //   console.log(form);
           if (validateTodo(form)) {
@@ -264,6 +267,13 @@ const handlers = (() => {
           }
         }
       });
+      if (homeDiv && validateTodo(form)) {
+        // console.log("valid");
+        todos.editTodo(form);
+        dom.createTodoDiv("All");
+        form.reset();
+        document.querySelector(`#dialog${todo.id}`).close();
+      }
     });
   }
 

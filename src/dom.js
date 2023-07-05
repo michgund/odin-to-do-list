@@ -8,7 +8,7 @@ const dom = (() => {
     const element = document.createElement("div");
     element.classList.add("banner");
     const title = document.createElement("h1");
-    title.textContent = "Todo";
+    title.textContent = "Todo List";
     element.appendChild(title);
     return element;
   }
